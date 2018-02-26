@@ -1,0 +1,3 @@
+Two scripts for finding (payload) bytes found in one trace file in another trace file.
+
+This is mainly usefull to correlate packets from two capture points when all other correlation techniques (ip.id, tcp.seq, etc...) fail.
