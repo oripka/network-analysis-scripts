@@ -80,21 +80,21 @@ def addmatch(packet1, packet2, minimalmatch):
 def getbytes(filename, filter, searchlen=10000):
 	out = []
 	output = subprocess.check_output(["tshark","-r",filename,"-T","fields","-e","frame.number","-e",filter])
-	output = output.replace(':', '')
+	output = output.decode("utf-8").replace(':', '')
 
 	for line in output.split('\n'):
 		if '\t' in line:
 			pktnum, data = line.split('\t')
 			if data != "":
 				# chop up data in max searchlen
-				for c in xrange(0, len(data), searchlen):
+				for c in range(0, len(data), searchlen):
 					chars = data[c:c+searchlen]
 					out.append([pktnum, chars])
 
 	if searchlen > 9000:
-		print "[+] Extracted "+str(len(out))+" packet data from "+filename
+		print("[+] Extracted "+str(len(out))+" packet data from "+filename)
 	else:	
-		print "[+] Extracted "+str(len(out))+" packet data segments a "+str(searchlen)+" from "+filename
+		print("[+] Extracted "+str(len(out))+" packet data segments a "+str(searchlen)+" from "+filename)
 	return out
 
 def main(stdin=sys.stdin, args=sys.argv):
@@ -119,8 +119,8 @@ Use --usage to get more help
 
 	searchlen = args.chunklen
 
-	print "[+] Comparing "+args.file1+" and "+args.file2
-	print "[+] ...with chunks of "+str(searchlen)+" bytes"
+	print("[+] Comparing "+args.file1+" and "+args.file2)
+	print("[+] ...with chunks of "+str(searchlen)+" bytes")
 
 	out1 = getbytes(args.file1, args.file1filter, searchlen)
 	out2 = getbytes(args.file2, args.file2filter)
@@ -129,9 +129,9 @@ Use --usage to get more help
 		for j in range(len(out2)):
 			addmatch(out1[i], out2[j], searchlen)
 
-	print ""
+	print("")
 	for match in matches:
-		print match
+		print(match)
 
 if __name__ == "__main__":
 	main()
